@@ -1,34 +1,36 @@
 import "./App.css";
-// vite는 파일 경로에서 확장자를 명시 안해줘도 내부적으로 찾아갈 수 있도록 자동 설정되어 있다.
-import Header from "./components/Header";
-import Main from "./components/Main";
-import Footer from "./components/Footer";
-import Button from "./components/Button";
+// 함수 컴포넌트에서 state 생성하려면 내장 함수인 useState import
+import { useState } from "react";
 
-// 부모 컴포넌트
-// 함수 선언식
 function App() {
-  const buttonProps = {
-    text: "메일",
-    color: "red",
-    a: 1,
-    b: 2,
-    c: 3,
-  };
+  // useState() 호출해서 반환 값을 구조 분해 할당으로 상태 값과, 상태 변화 함수 받기
+  // 상태 변화 함수를 통해 상태를 변경시키면 리액트가 내부적으로
+  // App 컴포넌트의 state가 변경됐다는 것을 감지하여 리렌더링한다.
+  const [count, setCount] = useState(0);
+  const [light, setLight] = useState("OFF");
 
   return (
     <>
-      <Button {...buttonProps} />
-      <Button text={"카페"} />
-      <Button text={"블로그"}>
-        <div>자식 요소</div>
-      </Button>
-      <Button text={"컴포넌트"}>
-        <Header />
-      </Button>
-      <Header />
-      <Main />
-      <Footer />
+      <div>
+        <h1>{light}</h1>
+        <button
+          onClick={() => {
+            setLight(light === "OFF" ? "ON" : "OFF");
+          }}
+        >
+          {light === "OFF" ? "켜기" : "끄기"}
+        </button>
+      </div>
+      <div>
+        <h1>{count}</h1>
+        <button
+          onClick={() => {
+            setCount(count + 1);
+          }}
+        >
+          +
+        </button>
+      </div>
     </>
   );
 }
