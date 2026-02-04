@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 // 간단한 회원가입 폼
 // 1. 이름
 // 2. 생년월일
@@ -16,11 +16,25 @@ const Register = () => {
     bio: "",
     gender: "",
   });
+  const countRef = useRef(0);
+  const inputRef = useRef();
 
-  console.log(input);
+  // useRef 대신 JS로 하면 되지 않나? test.
+  // 아무리 수정해도 count 값은 1로 고정
+  // onChange -> setInput -> Register 리렌더링
+  // 리렌더링은 결국 모든 코드 다시 실행하므로 count 0에서 시작
+  // 반면, 리액트의 useState, useRef는 리셋되지 않음
+  // let count = 0;
 
   // 이벤트 객체 e의 target에 input된 값이 들어있다.
   const onChange = (e) => {
+    // 수정 사항 생길 때 마다 리렌더링 없이 카운트
+    countRef.current++;
+    console.log(countRef.current);
+
+    // count++;
+    // console.log(count);
+
     // setInput 안의 ...input(스프레드 연산자)은 기존의 값을 유지하고
     // 입력된 프로퍼티만 수정해주기 위함이다.
     setInput({
@@ -32,12 +46,21 @@ const Register = () => {
     });
   };
 
+  const onSubmit = () => {
+    if (input.name === "") {
+      // 이름을 입력하는 DOM 요소에 포커스
+      inputRef.current.focus();
+      alert("이름을 입력하세요.");
+    }
+  };
+
   return (
     <div>
       {/* div는 한 줄을 차지함 */}
       <div>
         {/* value: 디폴트값 / onChange: 변화 반응 이벤트 핸들러 / placehoder: 안내문구 */}
         <input
+          ref={inputRef}
           name="name"
           value={input.name}
           onChange={onChange}
@@ -110,6 +133,8 @@ const Register = () => {
           영화
         </label>
       </div> */}
+
+      <button onClick={onSubmit}>제출</button>
     </div>
   );
 };
