@@ -1,11 +1,14 @@
 import "./ToDoItem.css";
 
-const ToDoItem = () => {
+const ToDoItem = ({ id, isDone, content, date }) => {
   return (
     <div className="ToDoItem">
-      <input type="checkbox" />
-      <div className="content">ToDo...</div>
-      <div className="date">Date</div>
+      {/* checkbox 타입에 onChange 핸들러 없이 props 던지면 에러 발생한다. */}
+      <input readOnly checked={isDone} type="checkbox" />
+      <div className="content">{content}</div>
+      <div className="date">
+        {new Date(date).toLocaleDateString()}
+      </div>
       <button>삭제</button>
     </div>
   );
