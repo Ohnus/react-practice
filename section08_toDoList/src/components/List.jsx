@@ -3,7 +3,7 @@ import { useState } from "react";
 import ToDoItem from "./ToDoItem";
 
 // props 받을 때 객체 구조 분해 할당 제발 까먹지마..
-const List = ({ todos, onUpdate }) => {
+const List = ({ todos, onUpdate, onDelete }) => {
   const [search, setSearch] = useState("");
 
   const onChangeSearch = (e) => {
@@ -52,6 +52,7 @@ const List = ({ todos, onUpdate }) => {
               key={todo.id}
               {...todo}
               onUpdate={onUpdate}
+              onDelete={onDelete}
             />
           );
         })}

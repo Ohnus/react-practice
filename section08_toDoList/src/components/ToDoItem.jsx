@@ -6,11 +6,16 @@ const ToDoItem = ({
   content,
   date,
   onUpdate,
+  onDelete,
 }) => {
   // input 타입이기 때문에 click이 아닌 change
   const onChangeCheckbox = () => {
     console.log(id);
     onUpdate(id);
+  };
+
+  const onClickDelete = () => {
+    onDelete(id);
   };
 
   return (
@@ -26,7 +31,7 @@ const ToDoItem = ({
       <div className="date">
         {new Date(date).toLocaleDateString()}
       </div>
-      <button>삭제</button>
+      <button onClick={onClickDelete}>삭제</button>
     </div>
   );
 };
