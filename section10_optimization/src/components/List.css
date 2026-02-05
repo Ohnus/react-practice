@@ -1,0 +1,26 @@
+.List {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.List > input {
+    flex: 1;
+    /* width: 100%; */
+    border: none;
+    border-bottom: 1px solid rgb(220, 220, 220);
+    /* 위, 오른쪽, 아래, 왼쪽 순서 */
+    /* 두 곳만 작성 시 첫 번째는 위아래 두 번째는 왼오 */
+    padding: 15px 0px;
+}
+
+.List > input:focus {
+    outline: none;
+    border-bottom: 1px solid rgb(37, 147, 255);
+}
+
+.List .todos_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
