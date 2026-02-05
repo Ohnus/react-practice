@@ -1,11 +1,11 @@
 import "./List.css";
 import { useState, useMemo, useContext } from "react";
 import ToDoItem from "./ToDoItem";
-import { TodoContext } from "../App";
+import { TodoStateContext } from "../App";
 
 // props 받을 때 객체 구조 분해 할당 제발 까먹지마..
 const List = () => {
-  const { todos } = useContext(TodoContext);
+  const todos = useContext(TodoStateContext);
 
   const [search, setSearch] = useState("");
 

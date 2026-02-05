@@ -4,11 +4,13 @@ import {
   useRef,
   useReducer,
   useCallback,
+  useMemo,
   createContext,
 } from "react";
 import Header from "./components/Header";
 import Editor from "./components/Editor";
 import List from "./components/List";
+import { useContext } from "react";
 
 const mockData = [
   {
@@ -52,7 +54,9 @@ function reducer(state, action) {
 
 // context는 보통 외부에서 생성
 // 리렌더링 할 때 마다 실행되기 때문에 저장소 역할만 하는 context는 외부 권장!
-export const TodoContext = createContext();
+// 변화 값, 변화x 값 분리하여 context 생성
+export const TodoStateContext = createContext();
+export const TodoDispatchContext = createContext();
 
 function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
@@ -101,20 +105,29 @@ function App() {
     });
   }, []);
 
+  // deps가 빈 배열이므로, 마운트 이후 변경하지 않는다.
+  // useCallback으로 1차적으로 함수들을 재생성하지 않도록 방지하고,
+  // useMemo를 통해 처음에 만들어진 함수를 객체로 함께 잡아 놓는다.
+  // 만약 useCallback 없다면, App 리렌더링 할 때마다 재생성되는
+  // 함수들을 useMemo 객체에 가두는 꼴이다.
+  const memoizedDispatch = useMemo(() => {
+    return { onCreate, onUpdate, onDelete };
+  }, []);
+
   return (
     <div className="App">
       <Header />
-      <TodoContext.Provider
-        value={{
-          todos,
-          onCreate,
-          onUpdate,
-          onDelete,
-        }}
-      >
-        <Editor />
-        <List />
-      </TodoContext.Provider>
+      <TodoStateContext.Provider value={todos}>
+        {/* App -> TodoStateContext -> TodoDispatchContext 이므로
+        App이 리렌더링 되면 Dispatch 또한 리렌더링 및 함수 재생성
+        따라서 여기서 useMemo를 쓴다. */}
+        <TodoDispatchContext.Provider
+          value={memoizedDispatch}
+        >
+          <Editor />
+          <List />
+        </TodoDispatchContext.Provider>
+      </TodoStateContext.Provider>
     </div>
   );
 }
