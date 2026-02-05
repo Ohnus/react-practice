@@ -1,9 +1,12 @@
 import "./List.css";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import ToDoItem from "./ToDoItem";
+import { TodoContext } from "../App";
 
 // props 받을 때 객체 구조 분해 할당 제발 까먹지마..
-const List = ({ todos, onUpdate, onDelete }) => {
+const List = () => {
+  const { todos } = useContext(TodoContext);
+
   const [search, setSearch] = useState("");
 
   const onChangeSearch = (e) => {
@@ -71,14 +74,7 @@ const List = ({ todos, onUpdate, onDelete }) => {
         spread 연산자로 보내면 각 프로퍼티로 바로 꺼낼 수 있다. */}
         {/* 리스트로 렌더링 된 컴포넌트나 어떤 요소들을 각각 구분할 때 key라는 prop으로 구분한다. */}
         {filteredTodos.map((todo) => {
-          return (
-            <ToDoItem
-              key={todo.id}
-              {...todo}
-              onUpdate={onUpdate}
-              onDelete={onDelete}
-            />
-          );
+          return <ToDoItem key={todo.id} {...todo} />;
         })}
       </div>
     </div>

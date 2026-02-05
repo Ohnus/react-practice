@@ -1,8 +1,12 @@
 import "./Editor.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { TodoContext } from "../App";
 
 // App으로부터 받은 props 'onCreate'를 객체 구조 분해 할당으로 받음
-export default function Editor({ onCreate }) {
+export default function Editor() {
+  // context 받기
+  const { onCreate } = useContext(TodoContext);
+
   const [content, setContent] = useState("");
   // 입력 없을 경우 input에 focus 줄 참조용
   const contentRef = useRef();

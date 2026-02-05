@@ -4,6 +4,7 @@ import {
   useRef,
   useReducer,
   useCallback,
+  createContext,
 } from "react";
 import Header from "./components/Header";
 import Editor from "./components/Editor";
@@ -48,6 +49,10 @@ function reducer(state, action) {
       return state;
   }
 }
+
+// context는 보통 외부에서 생성
+// 리렌더링 할 때 마다 실행되기 때문에 저장소 역할만 하는 context는 외부 권장!
+export const TodoContext = createContext();
 
 function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
@@ -99,12 +104,17 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Editor onCreate={onCreate} />
-      <List
-        todos={todos}
-        onUpdate={onUpdate}
-        onDelete={onDelete}
-      />
+      <TodoContext.Provider
+        value={{
+          todos,
+          onCreate,
+          onUpdate,
+          onDelete,
+        }}
+      >
+        <Editor />
+        <List />
+      </TodoContext.Provider>
     </div>
   );
 }

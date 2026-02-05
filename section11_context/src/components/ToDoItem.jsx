@@ -1,14 +1,9 @@
 import "./ToDoItem.css";
-import { memo } from "react";
+import { memo, useContext } from "react";
+import { TodoContext } from "../App";
 
-const ToDoItem = ({
-  id,
-  isDone,
-  content,
-  date,
-  onUpdate,
-  onDelete,
-}) => {
+const ToDoItem = ({ id, isDone, content, date }) => {
+  const { onUpdate, onDelete } = useContext(TodoContext);
   // input 타입이기 때문에 click이 아닌 change
   const onChangeCheckbox = () => {
     onUpdate(id);
