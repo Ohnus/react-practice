@@ -3,7 +3,7 @@ import { useState } from "react";
 import ToDoItem from "./ToDoItem";
 
 // props 받을 때 객체 구조 분해 할당 제발 까먹지마..
-const List = ({ todos }) => {
+const List = ({ todos, onUpdate }) => {
   const [search, setSearch] = useState("");
 
   const onChangeSearch = (e) => {
@@ -47,7 +47,13 @@ const List = ({ todos }) => {
         spread 연산자로 보내면 각 프로퍼티로 바로 꺼낼 수 있다. */}
         {/* 리스트로 렌더링 된 컴포넌트나 어떤 요소들을 각각 구분할 때 key라는 prop으로 구분한다. */}
         {filteredTodos.map((todo) => {
-          return <ToDoItem key={todo.id} {...todo} />;
+          return (
+            <ToDoItem
+              key={todo.id}
+              {...todo}
+              onUpdate={onUpdate}
+            />
+          );
         })}
       </div>
     </div>
