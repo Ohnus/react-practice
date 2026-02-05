@@ -1,9 +1,8 @@
 import "./App.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useReducer } from "react";
 import Header from "./components/Header";
 import Editor from "./components/Editor";
 import List from "./components/List";
-import ReducerExam from "./components/ReducerExam";
 
 const mockData = [
   {
@@ -26,57 +25,76 @@ const mockData = [
   },
 ];
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "CREATE":
+      return [action.data, ...state];
+    case "UPDATE":
+      return state.map((item) =>
+        item.id === action.targetId
+          ? { ...item, isDone: !item.isDone }
+          : item
+      );
+    case "DELETE":
+      return state.filter(
+        (item) => item.id !== action.targetId
+      );
+    default:
+      return state;
+  }
+}
+
 function App() {
-  const [todos, setTodos] = useState(mockData);
+  const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
 
-  // Editor로부터 받은 값을 통해 새로운 객체 생성
-  // 해당 객체를 todos 배열에 넣으며 리렌더링
-  // 이 때, todos.push(newToDO) 이렇게 하면 값만 넣을 뿐 리렌더링 x
+  // dispatch에 type과 새로운 todo 객체로 객체 생성
+  // dispatch에 type과 조작할 data 실어 보내기
+  // 조작은 위의 reducer에 한다.
   const onCreate = (content) => {
-    const newToDo = {
-      id: idRef.current++,
-      isDone: false,
-      content: content,
-      date: new Date().getTime(),
-    };
-
-    setTodos([newToDo, ...todos]);
+    dispatch({
+      type: "CREATE",
+      data: {
+        id: idRef.current++,
+        isDone: false,
+        content: content,
+        date: new Date().getTime(),
+      },
+    });
   };
 
   // 체크박스 수정
   // App -> List -> ToDoItem
   const onUpdate = (targetId) => {
+    dispatch({
+      type: "UPDATE",
+      targetId: targetId,
+    });
+
     // todos State 값들 중에 targetId와 일치하는
     // id를 갖는 투두 아이템의 isDone을 변경
-
     // 인수: todos 배열에서 targetId와 일치하는 id를 갖는
     // 요소의 데이터만 바꾼 새로운 배열
-    setTodos(
-      todos.map((todo) =>
-        todo.id === targetId
-          ? { ...todo, isDone: !todo.isDone }
-          : todo
-      )
-    );
   };
 
   const onDelete = (targetId) => {
+    dispatch({
+      type: "DELETE",
+      targetId: targetId,
+    });
     // 인수: todos 배열에서 targetId와 일치하는 id를 갖는 요소만
     // 삭제한 새로운 배열 넣기
-    setTodos(todos.filter((todo) => todo.id !== targetId));
   };
 
   return (
     <div className="App">
-      {/* <Header />
+      <Header />
       <Editor onCreate={onCreate} />
       <List
         todos={todos}
         onUpdate={onUpdate}
         onDelete={onDelete}
-      /> */}
-      <ReducerExam />
+      />
     </div>
   );
 }
