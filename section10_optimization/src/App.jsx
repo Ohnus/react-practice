@@ -1,5 +1,10 @@
 import "./App.css";
-import { useState, useRef, useReducer } from "react";
+import {
+  useState,
+  useRef,
+  useReducer,
+  useCallback,
+} from "react";
 import Header from "./components/Header";
 import Editor from "./components/Editor";
 import List from "./components/List";
@@ -48,10 +53,17 @@ function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
 
+  // useCallback()
+  // 첫 번째 인수: 재생성 원치 않는 함수
+  // 두 번째 인수: deps
+  // 첫 번째 인수인 콜백 함수를 그대로 반환함
+  // deps가 변경되었을 때만 함수 재생성 = 함수 memoization
+  // const func = useCallback(()=>{}, []);
+
   // dispatch에 type과 새로운 todo 객체로 객체 생성
   // dispatch에 type과 조작할 data 실어 보내기
   // 조작은 위의 reducer에 한다.
-  const onCreate = (content) => {
+  const onCreate = useCallback((content) => {
     dispatch({
       type: "CREATE",
       data: {
@@ -61,11 +73,11 @@ function App() {
         date: new Date().getTime(),
       },
     });
-  };
+  }, []);
 
   // 체크박스 수정
   // App -> List -> ToDoItem
-  const onUpdate = (targetId) => {
+  const onUpdate = useCallback((targetId) => {
     dispatch({
       type: "UPDATE",
       targetId: targetId,
@@ -75,16 +87,14 @@ function App() {
     // id를 갖는 투두 아이템의 isDone을 변경
     // 인수: todos 배열에서 targetId와 일치하는 id를 갖는
     // 요소의 데이터만 바꾼 새로운 배열
-  };
+  }, []);
 
-  const onDelete = (targetId) => {
+  const onDelete = useCallback((targetId) => {
     dispatch({
       type: "DELETE",
       targetId: targetId,
     });
-    // 인수: todos 배열에서 targetId와 일치하는 id를 갖는 요소만
-    // 삭제한 새로운 배열 넣기
-  };
+  }, []);
 
   return (
     <div className="App">
