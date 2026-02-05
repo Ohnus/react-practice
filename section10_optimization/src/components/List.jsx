@@ -29,7 +29,8 @@ const List = ({ todos, onUpdate, onDelete }) => {
 
   // 첫 번째 인수: 콜백 함수
   // 두 번째 인수: deps(의존성 배열)
-  // deps가 변경될 때에만 콜백 함수 실행
+  // 일반 함수로 하면 리렌더링 되면서 다른 동작 시에도 실행
+  // useMemo는 deps가 변경될 때에만 콜백 함수 실행
   // 콜백 함수가 반환하는 값을 useMemo가 반환
   const { totalCount, doneCount, notDoneCount } =
     useMemo(() => {

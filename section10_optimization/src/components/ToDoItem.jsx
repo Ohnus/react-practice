@@ -52,5 +52,9 @@ export default memo(ToDoItem, (prevProps, nextProps) => {
   if (prevProps.date !== nextProps.date) return false;
 
   // 4개를 제외한 값들이 바뀌지 않았을 경우 true 보내서 리렌더링x
+  // 똑같은 컴포넌트가 아이템 개수만큼 나열
+  // 특정 컴포넌트 변경 시, map에 의해 변경이 되지 않은 다른 컴포넌트들도 Props를 받음
+  // 하지만 변경된 특정 컴포넌트는 if문에 의해 리렌더링이 되고,
+  // 나머지 컴포넌트들은 변경 사항이 없으므로 아래의 return true 통해 리렌더링 x
   return true;
 });
